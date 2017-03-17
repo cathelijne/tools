@@ -1,0 +1,61 @@
+#!/bin/bash
+# git hook to make sure user.email exists before committing
+#
+#
+# If you're using more than one git provider, it's too easy to acidentally commit with the eamil address of
+# one to the other. Yes, you can --amend, but, well, ugh. Sohere's what I came up with:
+#
+# 1) check out your git projects in provider-specific directories. I have the following directories set up:
+#
+#    /home/cathelijne/work/gitrepos/------github
+#                                  |------bitbucket
+#                                  |------workspecific
+# 
+# 2) (Mis-)use your git config to add per-provider email addresses to it:
+#
+#    "git config --global github.email my.github@email.address"
+#    "git config --global bitbucket.email my.bitbucket@email.address"
+#    "git config --global workspecific.email my.work@email.address"
+#
+# 3) Even though we're installing a pre-commit hook, git does it's own pre-check, and does this BEFORE your
+#    hook fires. If you don't have a name and email adress set, it will complain, and your hook script won't
+#    even run. This means you will have to set a global name and email address:
+#
+#    "git config --global user.name My Name"
+#    "git config --global user.email SetMe"
+#
+#    I'm using a dummy email address. You could also use a real one. It's the last one checked, so you could
+#    use this as the (global) fallback option.
+#
+# 4) Copy this script to ~/.git/templates/hooks/pre-commit and chmod to 755
+#
+# 5) Tell git to always copy this hook to new projects by adding an init section to your ~/.gitconfig
+#
+#    [init]
+#        templatedir = ~/.git/templates
+#
+# That's it.
+# Caveat: Script doesn't check if your repo is actually inside your git tree. 
+
+
+EMAIL=$(git config --local user.email)
+if [ $EMAIL ]; then
+  echo "Found repository-specific email address $EMAIL. Good!"
+  exit 0
+fi
+
+EMAIL=$(git config --global $(basename $(dirname $(git rev-parse --show-toplevel))).email)
+if [ $EMAIL ]; then
+    echo "Found git-provider specific email address $EMAIL. Good! Using it as our repo-specific email address"
+    git config user.email $EMAIL
+    exit 0
+fi
+
+EMAIL=$(git config --global user.email)
+if [ $EMAIL ]; then
+    echo "Found a global email adress $EMAIL. You might want to check if that's what you want."
+    echo "You can change the adress used with"
+    echo '        git commit --amend --author="Author Name <email@address.com>"'
+    exit 0
+fi
+
