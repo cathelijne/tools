@@ -17,7 +17,7 @@
 #    "git config --global bitbucket.email my.bitbucket@email.address"
 #    "git config --global workspecific.email my.work@email.address"
 #
-# 3) Even though we're installing a pre-commit hook, git does it's own pre-check, and does this BEFORE your
+# 3) Even though we're installing a pre-commit hook, git does its own pre-check, and does this BEFORE your
 #    hook fires. If you don't have a name and email adress set, it will complain, and your hook script won't
 #    even run. This means you will have to set a global name and email address:
 #
