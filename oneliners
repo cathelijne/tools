@@ -1,0 +1,11 @@
+#calculate average memory apache uses per worker
+ps aux |grep www-data| awk '{ sum += $6; n++ } END { if (n > 0) print sum / n /1024; }'
+
+#automatic numbering
+IFS=$'\n'; h=1; for i in `ls`; do k="`echo $i |sed -e s/"Replace this, for exmple two digits: [09][09]"/"$h"/`"; mv "$i" "$k";  h=$(( h+1)); done
+
+#move from Muziek to Pokkeherrie
+ls|awk -F "\n" '{print("mv \""$1"\" \""$1"\"")}' |sed -e s/Muziek/Pokkeherrie/2 |/bin/sh
+
+#Delete all empty dirs in a tree
+find . -type d | tail -r | xargs rmdir 2>/dev/null
