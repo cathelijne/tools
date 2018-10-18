@@ -9,3 +9,6 @@ ls|awk -F "\n" '{print("mv \""$1"\" \""$1"\"")}' |sed -e s/Muziek/Pokkeherrie/2 
 
 #Delete all empty dirs in a tree
 find . -type d | tail -r | xargs rmdir 2>/dev/null
+
+# make E-m5 dcp profiles into e-pl5 profiles (zsh)
+IFS=$'\n'; for i in `ls *`; do dcptool -d $i|sed -e 's/M5/PL5/' > ${i:s/M5/PL5/:r}.xml;dcptool -c ${i:s/M5/PL5/:r}.xml ${i:s/M5/PL5/:r}.dcp; done
