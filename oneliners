@@ -1,0 +1,7 @@
+IFS=$'\n'; h=1; for i in `ls`; do k="`echo $i |sed -e s/"Vervang dit: bijvoorbeeld twee nummers: [09][09]"/"$h"/`"; mv "$i" "$k";  h=$(( h+1)); done
+
+
+ls|awk -F "\n" '{print("mv \""$1"\" \""$1"\"")}' |sed -e s/Muziek/Pokkeherrie/2 |/bin/sh
+
+
+find . -type d | tail -r | xargs rmdir 2>/dev/null
