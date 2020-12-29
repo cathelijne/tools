@@ -1,7 +1,17 @@
-IFS=$'\n'; h=1; for i in `ls`; do k="`echo $i |sed -e s/"Vervang dit: bijvoorbeeld twee nummers: [09][09]"/"$h"/`"; mv "$i" "$k";  h=$(( h+1)); done
+# calculate average memory apache uses per worker
+ps aux |grep www-data| awk '{ sum += $6; n++ } END { if (n > 0) print sum / n /1024; }'
 
+# automatic numbering
+IFS=$'\n'; h=1; for i in `ls`; do k="`echo $i |sed -e s/"Replace this, for example two digits: [09][09]"/"$h"/`"; mv "$i" "$k";  h=$(( h+1)); done
 
+# move from Muziek to Pokkeherrie
 ls|awk -F "\n" '{print("mv \""$1"\" \""$1"\"")}' |sed -e s/Muziek/Pokkeherrie/2 |/bin/sh
 
-
+#Delete all empty dirs in a tree
 find . -type d | tail -r | xargs rmdir 2>/dev/null
+
+# make E-m5 dcp profiles into e-pl5 profiles (zsh)
+IFS=$'\n'; for i in `ls *`; do dcptool -d $i|sed -e 's/M5/PL5/' > ${i:s/M5/PL5/:r}.xml;dcptool -c ${i:s/M5/PL5/:r}.xml ${i:s/M5/PL5/:r}.dcp; done
+
+# sort videos in year/month directories with mediainfo
+for i in $(ls -1p  |egrep -v "(\/|\(|\ )"); do echo mv $i $(/usr/local/Cellar/media-info/19.09/bin/mediainfo $i |grep -m1 "Encoded date"|awk '{print (substr($5,1,4) "/" substr($5,6,2))}'); done|/bin/sh
