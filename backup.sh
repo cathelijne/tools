@@ -66,8 +66,8 @@ done
 /usr/bin/mysqldump -u${MYSQLUSER} -p${MYSQLPASS} --all-databases --ignore-table=mysql.events > ${TODAYSBACKUP}/${TODAY}.sql \
 	 && MESSAGE="${MESSAGE}Backed up mysql\n"  || MESSAGE="${MESSAGE}Oops (mysql)\n"
 # debian based systems
-/usr/bin/dpkg --get-selections > ${TODAYSBACKUP}/${TODAY}.selections \
-	 && MESSAGE="${MESSAGE}Backed up installed packages\n"  || MESSAGE="${MESSAGE}Oops (dpkg --get-selections)\n"
+#/usr/bin/dpkg --get-selections > ${TODAYSBACKUP}/${TODAY}.selections \
+#	 && MESSAGE="${MESSAGE}Backed up installed packages\n"  || MESSAGE="${MESSAGE}Oops (dpkg --get-selections)\n"
 # redhat based systems
 rpm -qa > ${TODAYSBACKUP}/${TODAY}.rpmlist \
 	 && MESSAGE="${MESSAGE}Backed up installed packages\n"  || MESSAGE="${MESSAGE}Oops (rpm -qa)\n"
