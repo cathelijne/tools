@@ -65,8 +65,12 @@ done
 # See what packages, gems and python modules are installed and back up
 /usr/bin/mysqldump -u${MYSQLUSER} -p${MYSQLPASS} --all-databases --ignore-table=mysql.events > ${TODAYSBACKUP}/${TODAY}.sql \
 	 && MESSAGE="${MESSAGE}Backed up mysql\n"  || MESSAGE="${MESSAGE}Oops (mysql)\n"
+# debian based systems
 /usr/bin/dpkg --get-selections > ${TODAYSBACKUP}/${TODAY}.selections \
 	 && MESSAGE="${MESSAGE}Backed up installed packages\n"  || MESSAGE="${MESSAGE}Oops (dpkg --get-selections)\n"
+# redhat based systems
+rpm -qa > ${TODAYSBACKUP}/${TODAY}.rpmlist \
+	 && MESSAGE="${MESSAGE}Backed up installed packages\n"  || MESSAGE="${MESSAGE}Oops (rpm -qa)\n"
 if [ -f /usr/bin/gem ]; then
 	/usr/bin/gem list > ${TODAYSBACKUP}/${TODAY}.gems \
 	&& MESSAGE="${MESSAGE}Backed up installed gems\n"  || MESSAGE="${MESSAGE}Oops (gem list)\n"
